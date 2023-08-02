@@ -81,13 +81,17 @@ void main() {
       var description = stdin.readLineSync()!;
       print("Due Date (YYYY-MM-DD): ");
       var dueDateStr = stdin.readLineSync()!;
-      var dueDate = DateTime.parse(dueDateStr);
-      taskManager.addTask(Task(
-        title: title,
-        description: description,
-        dueDate: dueDate,
-      ));
-      print("Task added successfully!\n");
+      try {
+        var dueDate = DateTime.parse(dueDateStr);
+        taskManager.addTask(Task(
+          title: title,
+          description: description,
+          dueDate: dueDate,
+        ));
+        print("Task added successfully!\n");
+      } catch (e) {
+        print("Invalid date format. Please use YYYY-MM-DD format.\n");
+      }
     } else if (input == '2') {
       print("All tasks:");
       print(taskManager.allTasks);
@@ -119,18 +123,22 @@ void main() {
         var newDescription = stdin.readLineSync()!;
         print("New Due Date (YYYY-MM-DD): ");
         var newDueDateStr = stdin.readLineSync()!;
-        var newDueDate = DateTime.parse(newDueDateStr);
-        print("Is it completed? (true or false): ");
-        var newStatusStr = stdin.readLineSync()!;
-        var newStatus = newStatusStr.toLowerCase() == 'true';
-        taskManager.editTask(
-          taskToEdit,
-          newTitle,
-          newDescription,
-          newDueDate,
-          newStatus,
-        );
-        print("Task updated successfully!\n");
+        try {
+          var newDueDate = DateTime.parse(newDueDateStr);
+          print("Is it completed? (true or false): ");
+          var newStatusStr = stdin.readLineSync()!;
+          var newStatus = newStatusStr.toLowerCase() == 'true';
+          taskManager.editTask(
+            taskToEdit,
+            newTitle,
+            newDescription,
+            newDueDate,
+            newStatus,
+          );
+          print("Task updated successfully!\n");
+        } catch (e) {
+          print("Invalid date format. Please use YYYY-MM-DD format.\n");
+        }
       }
     } else if (input == '6') {
       print("Enter the title of the task you want to delete:");
