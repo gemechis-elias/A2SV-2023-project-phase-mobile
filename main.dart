@@ -76,18 +76,32 @@ void main() {
     if (input == '1') {
       print("Enter task details:");
       print("Title: ");
-      var title = stdin.readLineSync()!;
+      var title = stdin.readLineSync();
+      if (title == null || title.isEmpty) {
+        print("Task title cannot be empty. Please try again.\n");
+        continue;
+      }
+
       print("Description: ");
-      var description = stdin.readLineSync()!;
+      var description = stdin.readLineSync();
+
       print("Due Date (YYYY-MM-DD): ");
-      var dueDateStr = stdin.readLineSync()!;
-      var dueDate = DateTime.parse(dueDateStr);
-      taskManager.addTask(Task(
-        title: title,
-        description: description,
-        dueDate: dueDate,
-      ));
-      print("Task added successfully!\n");
+      var dueDateStr = stdin.readLineSync();
+      try {
+        if (dueDateStr == null || dueDateStr.isEmpty) {
+          print("Due date cannot be empty. Please try again.\n");
+          continue;
+        }
+        var dueDate = DateTime.parse(dueDateStr);
+        taskManager.addTask(Task(
+          title: title,
+          description: description ?? '',
+          dueDate: dueDate,
+        ));
+        print("Task added successfully!\n");
+      } catch (e) {
+        print("Invalid date format. Please use YYYY-MM-DD format.\n");
+      }
     } else if (input == '2') {
       print("All tasks:");
       print(taskManager.allTasks);
@@ -99,7 +113,12 @@ void main() {
       print(taskManager.pendingTasks);
     } else if (input == '5') {
       print("Enter the title of the task you want to edit:");
-      var titleToEdit = stdin.readLineSync()!;
+      var titleToEdit = stdin.readLineSync();
+      if (titleToEdit == null || titleToEdit.isEmpty) {
+        print("Task title cannot be empty. Please try again.\n");
+        continue;
+      }
+
       var taskToEdit = taskManager.allTasks.firstWhere(
         (task) => task.title == titleToEdit,
         orElse: () => Task(
@@ -114,27 +133,48 @@ void main() {
       } else {
         print("Enter updated task details:");
         print("New Title: ");
-        var newTitle = stdin.readLineSync()!;
+        var newTitle = stdin.readLineSync();
+        if (newTitle == null || newTitle.isEmpty) {
+          print("New title cannot be empty. Please try again.\n");
+          continue;
+        }
+
         print("New Description: ");
-        var newDescription = stdin.readLineSync()!;
+        var newDescription = stdin.readLineSync();
+
         print("New Due Date (YYYY-MM-DD): ");
-        var newDueDateStr = stdin.readLineSync()!;
-        var newDueDate = DateTime.parse(newDueDateStr);
-        print("Is it completed? (true or false): ");
-        var newStatusStr = stdin.readLineSync()!;
-        var newStatus = newStatusStr.toLowerCase() == 'true';
-        taskManager.editTask(
-          taskToEdit,
-          newTitle,
-          newDescription,
-          newDueDate,
-          newStatus,
-        );
-        print("Task updated successfully!\n");
+        var newDueDateStr = stdin.readLineSync();
+        try {
+          if (newDueDateStr == null || newDueDateStr.isEmpty) {
+            print("New due date cannot be empty. Please try again.\n");
+            continue;
+          }
+          var newDueDate = DateTime.parse(newDueDateStr);
+
+          print("Is it completed? (true or false): ");
+          var newStatusStr = stdin.readLineSync();
+          var newStatus = newStatusStr?.toLowerCase() == 'true';
+
+          taskManager.editTask(
+            taskToEdit,
+            newTitle,
+            newDescription ?? '',
+            newDueDate,
+            newStatus,
+          );
+          print("Task updated successfully!\n");
+        } catch (e) {
+          print("Invalid date format. Please use YYYY-MM-DD format.\n");
+        }
       }
     } else if (input == '6') {
       print("Enter the title of the task you want to delete:");
-      var titleToDelete = stdin.readLineSync()!;
+      var titleToDelete = stdin.readLineSync();
+      if (titleToDelete == null || titleToDelete.isEmpty) {
+        print("Task title cannot be empty. Please try again.\n");
+        continue;
+      }
+
       var taskToDelete = taskManager.allTasks.firstWhere(
         (task) => task.title == titleToDelete,
         orElse: () => Task(
